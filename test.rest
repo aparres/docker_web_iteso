@@ -1,0 +1,42 @@
+@host = https://ttr7ss9v-3000.use.devtunnels.ms
+
+### engineVersion
+GET {{host}}/api/engineVersion
+
+### Obtener todos los contenedores que estan corriendo
+GET {{host}}/api/containers
+
+### Crear un contenedor
+POST {{host}}/api/containers
+Content-Type: application/json
+
+{
+  "Image": "nginx",
+  "name": "nginx",
+  "HostConfig": {
+    "PortBindings": {
+      "80/tcp": [{"HostPort": "8080"}]
+    }
+  }
+}
+
+### Iniciar un contenedor
+# @prompt id ID del contenedor
+POST {{host}}/api/containers/{{id}}/start
+
+### Detener un contenedor
+# @prompt id ID del contenedor
+POST {{host}}/api/containers/{{id}}/stop
+
+### Reiniciar un contenedor
+# @prompt id ID del contenedor
+POST {{host}}/api/containers/{{id}}/restart
+
+### Eliminar un contenedor
+# @prompt id ID del contenedor
+DELETE {{host}}/api/containers/{{id}}
+
+
+
+
+

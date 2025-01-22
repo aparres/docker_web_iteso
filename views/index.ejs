@@ -1,0 +1,67 @@
+<%- include('header') %>
+<%- include('navbar') %>
+<div class="d-flex justify-content-center">
+<table data-toggle="table" data-search="true" data-pagination="true" class="table table-striped table-borderless w-100">
+    <thead>
+      <tr>
+        <th scope="col">Container ID</th>
+        <th data-sortable="true" scope="col">Name</th>
+        <th data-sortable="true" scope="col">Image</th>
+        <th data-sortable="true" scope="col">State</th>
+        <th data-sortable="true" scope="col">Status</th>
+        <th scope="col">Ports</th>
+        <th data-sortable="true" scope="col">Dueño</th>
+        <th data-sortable="true" scope="col">Grupo</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% containers.forEach(function(container) { %>
+        <tr>
+          <td><%= container.Id.substring(0,10) %></td>
+          <td><%= container.Names %></td>
+          <td><%= container.Image %></td>
+          <td><%= container.State %></td>
+          <td><%= container.Status %></td>
+          <td><%= container.Ports.map(function(port) { return port.IP + ':' + port.PublicPort + '->' + port.PrivatePort + '/' + port.Type; }).join(', ') %></td>          
+          <td><%= container.owner %></td>
+          <td><%= container.grupo %></td>
+          <td>
+            <% if(container.State != "running") { %> <a href="/start/<%= container.Id %>">Start</a> <% } %> 
+            <% if(container.State == "running") { %> <a href="/stop/<%= container.Id %>">Stop</a> <% } %>
+            <a href="/restart/<%= container.Id %>">Restart</a>
+            <% if(container.State != "running") { %> <a href="/remove/<%= container.Id %>">Remove</a> <% } %>
+        </tr>
+      <% }); %>
+  </table>
+  </div>
+  <div class="container">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header">
+          <p class="h2">Create Container</p>
+          <form action="/create" method="post">
+            <div class="form-group">     
+              <label for="image">Image</label>
+              <select class="form-control" id="image" name="image">
+                <% images.forEach(function(image) { %>
+                  <option><%= image.RepoTags[0] %></option>
+                <% }); %>
+              </select>
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+              <div class="row">
+                <div class="col">
+                <label for="port">Puerto Container</label>
+                <input type="text" class="form-control" id="port" name="port" placeholder="Puerto Container">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>    
+        </div>
+      </div>
+    </div>
+  </div>        
+</span>
+<%- include('footer') %>
